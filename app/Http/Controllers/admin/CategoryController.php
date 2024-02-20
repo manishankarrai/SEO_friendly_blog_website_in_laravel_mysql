@@ -5,8 +5,9 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Category ;
-use DB;
-use Crypt ;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt ;
+use Illuminate\Support\Facades\Auth ;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -16,13 +17,16 @@ class CategoryController extends Controller
      public function __construct()
     {
         $this->middleware('auth');
-        $this->checkRole();
     }
    
     public function index()
     {
            try {  
-            $data =  Category::orderby('category' , 'asc')->get();
+               if(! $this->roleInfo()) {
+                 Auth::logout();
+                 return redirect('/')->with('error' , 'Error found in url !');
+               }
+               $data =  Category::orderby('category' , 'asc')->get();
             return view('admin.category.index' , compact('data'));
            }   catch( \Exception $e){
             return redirect()->back()->with('error' , 'Error found in url !');
@@ -34,6 +38,10 @@ class CategoryController extends Controller
     public function create()
     {
            try {
+            if(! $this->roleInfo()) {
+              Auth::logout();
+              return redirect('/')->with('error' , 'Error found in url !');
+            }
             return view('admin.category.create');
           } catch( \Exception $e){
             return redirect()->back()->with('error' , 'Error found in url !');
@@ -48,6 +56,10 @@ class CategoryController extends Controller
     {
          
         try {
+          if(! $this->roleInfo()) {
+            Auth::logout();
+            return redirect('/')->with('error' , 'Error found in url !');
+          }
             $validator = Validator::make($request->all(), [
                 'priority' => 'required|numeric',
                 'category'  => 'required|string',
@@ -99,15 +111,16 @@ class CategoryController extends Controller
     }
 
    
-    public function show(string $id)
-    {
-        //
-    }
+    
 
   
     public function edit(Request $request)
     {
         try {
+          if(! $this->roleInfo()) {
+            Auth::logout();
+            return redirect('/')->with('error' , 'Error found in url !');
+          }
             $id =  Crypt::decrypt($request->id);
             $data = Category::find($id);
             return view('admin.category.edit' , compact('data'));
@@ -121,6 +134,10 @@ class CategoryController extends Controller
     {
             
       try {
+        if(! $this->roleInfo()) {
+          Auth::logout();
+          return redirect('/')->with('error' , 'Error found in url !');
+        }
          $validator = Validator::make($request->all(), [
                 'priority' => 'required|numeric',
                 'category'  => 'required|string',
@@ -177,6 +194,10 @@ class CategoryController extends Controller
     public function destroy(Request $request)
     {
         try {
+          if(! $this->roleInfo()) {
+            Auth::logout();
+            return redirect('/')->with('error' , 'Error found in url !');
+          }
             $id =  Crypt::decrypt($request->id);
             $data = Category::find($id);
             $data->delete();

@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SubCategory ;
 use Illuminate\Support\Facades\Validator;
-use Crypt ;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt ;
+use Illuminate\Support\Facades\Auth ;
 class SubCategoryController extends Controller
 {
     public function __construct()
@@ -19,6 +20,10 @@ class SubCategoryController extends Controller
     public function index()
     {
            try {  
+            if(! $this->roleInfo()) {
+              Auth::logout();
+              return redirect('/')->with('error' , 'Error found in url !');
+            }
             $data =  SubCategory::leftJoin('categories' ,'sub_categories.category' , '=' , 'categories.id')
             ->select('sub_categories.*' , 'categories.category as category_name')
             ->orderby('subcategory' , 'asc')->get();
@@ -33,6 +38,10 @@ class SubCategoryController extends Controller
     public function create()
     {
          try {
+          if(! $this->roleInfo()) {
+            Auth::logout();
+            return redirect('/')->with('error' , 'Error found in url !');
+          }
             $category =  DB::table('categories')->orderby('category' , 'asc')->get();
             return view('admin.subcategory.create' , compact('category'));
           } catch( \Exception $e){
@@ -48,6 +57,10 @@ class SubCategoryController extends Controller
     {
          
         try {
+          if(! $this->roleInfo()) {
+            Auth::logout();
+            return redirect('/')->with('error' , 'Error found in url !');
+          }
             $validator = Validator::make($request->all(), [
                 'category' => 'required|numeric',
                 'priority' => 'required|numeric',
@@ -102,15 +115,16 @@ class SubCategoryController extends Controller
     }
 
    
-    public function show(string $id)
-    {
-        //
-    }
+   
 
   
     public function edit(Request $request)
     {
         try {
+          if(! $this->roleInfo()) {
+            Auth::logout();
+            return redirect('/')->with('error' , 'Error found in url !');
+          }
             $id =  Crypt::decrypt($request->id);
             $data = SubCategory::find($id);
             $category =  DB::table('categories')->orderby('category' , 'asc')->get();
@@ -126,6 +140,10 @@ class SubCategoryController extends Controller
     {
             
       try {
+        if(! $this->roleInfo()) {
+          Auth::logout();
+          return redirect('/')->with('error' , 'Error found in url !');
+        }
         $validator = Validator::make($request->all(), [
                 'category' => 'required|numeric',
                 'priority' => 'required|numeric',
@@ -185,6 +203,10 @@ class SubCategoryController extends Controller
     public function destroy(Request $request)
     {
         try {
+          if(! $this->roleInfo()) {
+            Auth::logout();
+            return redirect('/')->with('error' , 'Error found in url !');
+          }
             $id =  Crypt::decrypt($request->id);
             $data = SubCategory::find($id);
             $data->delete();

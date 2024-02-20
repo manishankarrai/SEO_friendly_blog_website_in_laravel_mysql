@@ -4,10 +4,10 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Sign In | HRMS </title>
+    <title>Sign In | myblog </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="{{ url('public/icon.png')}}">
 
     <!-- Layout config Js -->
     <script src="{{ url('public/assets/js/layout.js') }}"></script>
@@ -35,7 +35,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="text-center">
-                    <p class="mb-0">Version v1.10 2023
+                    <p class="mb-0">Version v1.10 &nbsp; <script>
+                        document.write(new Date().getFullYear())
+                    </script> </p>
+
                 </div>
             </div>
         </div>

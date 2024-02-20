@@ -169,8 +169,22 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-        Mews\Captcha\CaptchaServiceProvider::class,
+        
     ])->toArray(),
+
+
+      'debug_blacklist' =>[
+
+        '_COOKIE' =>array_keys($_COOKIE),
+
+        '_SERVER' =>array_keys($_SERVER),
+
+        '_ENV' =>array_keys($_ENV),
+
+
+	],
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -185,7 +199,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'Captcha' => Mews\Captcha\Facades\Captcha::class,
+       
     ])->toArray(),
 
 ];

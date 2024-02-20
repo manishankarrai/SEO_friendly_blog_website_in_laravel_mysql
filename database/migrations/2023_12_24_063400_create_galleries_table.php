@@ -13,11 +13,7 @@ return new class extends Migration
     {
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
-            $table->integer('post')->nullable();
-            $table->integer('viralpost')->nullable();
-            $table->string('name');
-            $table->string('name_seo');
-            $table->string('file');
+           
             $table->timestamps();
         });
     }

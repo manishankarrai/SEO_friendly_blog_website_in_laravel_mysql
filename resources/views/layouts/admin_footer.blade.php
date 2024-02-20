@@ -4,13 +4,15 @@
            <div class="container-fluid">
                <div class="row">
                    <div class="col-sm-6">
+                       ©
                        <script>
                            document.write(new Date().getFullYear())
-                       </script> © Free eBook.
+
+                       </script> myblog .
                    </div>
                    <div class="col-sm-6">
                        <div class="text-sm-end d-none d-sm-block">
-                           Design & Develop by Books Cloud
+
                        </div>
                    </div>
                </div>
@@ -58,35 +60,75 @@
 
        <!-- App js -->
        <script src="{{ url('public/assets/js/app.js') }}"></script>
-       <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+       {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
        <script src="{{ url('public/assets/js/jquery.min.js') }}"></script>
+       <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+       <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+       <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+       <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+       <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+       <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+       <script src="{{ url('public/assets/js/pages/datatables.init.js') }}"></script>
 
-
-
- <script src="{{ url('public/assets/js/pages/select2.init.js')}}"></script>
+       <script src="https://cdn.tiny.cloud/tinymce.min.js" referrerpolicy="origin"></script>
+       {{-- add your tinney editor link here  --}}
        <script>
-         $(document).ready(function(){
+           tinymce.init({
+               selector: '.mytextarea'
+               , plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount'
+               , toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
+           , });
 
-         $(".select2").select2();
-        $.ajaxSetup({
-         headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-          });
+       </script>
+
+       <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+       <script>
+           ClassicEditor
+               .create(document.querySelector('#myeditor'), {
+
+                   removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed']
+               , })
+               .catch(error => {
+                   console.error(error);
+               });
+
+       </script>
+
+       <script src="{{ url('public/assets/js/select2/dist/js/select2.min.js') }}"></script>
+
+       <script>
+           $(document).ready(function() {
+
+               $(".select2").select2();
+               $.ajaxSetup({
+                   headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                   }
+               });
+
+               $("#topnav-hamburger-icon").click(function() {
+                   $("#mySidepanel").css("width", "250px");
+               });
+
+               $(".closebtn").click(function() {
+                   $("#mySidepanel").css("width", "0");
+               });
 
 
-    });
+           });
 
-       
+
            function DeleteItems(page, action, id) {
                var where_to = confirm("Do you really want to Delete this??");
                if (where_to == true) {
                    window.location.href = page + "/" + action + "/" + id;
                }
            }
+
        </script>
 
-        @yield('js_bottom')
+       @yield('js_bottom')
+
        </body>
 
        </html>

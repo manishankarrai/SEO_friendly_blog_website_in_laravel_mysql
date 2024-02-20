@@ -1,5 +1,5 @@
 @php
- $active_menu = "master";
+ $active_menu = "";
  $active_sub_menu = "topic";
 @endphp
 @extends('layouts.admin_master')
@@ -25,7 +25,11 @@
         </div>
         <!-- end page title -->
         <div class="col-md-12 text-right" style="padding-bottom: 20px;">
-            <a href="{{ route('admin-topic-create') }}" class="btn btn-primary">+ Add New Topic</a>
+            @role('admin')
+            <a href="{{ route('admin-topic-pending') }}" class="btn btn-primary">  Pending</a>
+            <a href="{{ route('admin-topic-deleted') }}" class="btn btn-primary">  Deleted</a>
+            @endrole
+            <a href="{{ route('admin-topic-create') }}" class="btn btn-primary">+ Add New </a>
         </div>
             <div class="col-xl-12">
                 <div class="card">
@@ -50,9 +54,11 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">S.No</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Category</th>
-                                            <th scope="col">SubCategory</th>
+                                            @role('admin')
+                                            <th scope="col">Status</th>
+                                            @endrole
+                                          <th scope="col">Name</th>
+                                           
                                             <th scope="col">Seo</th>
                                             <th scope="col">Priority</th>
                                             <th scope="col">Action</th>
@@ -62,16 +68,18 @@
                                         @php $i=1; @endphp
 			                            @foreach($data as $value)
                                         <tr>
-                                            <th scope="row">{{ $i; }}.</th>
+                                            <th scope="row">{{ $i }}.</th>
+                                            @role('admin')
+                                            <td class="text-danger">{{ $value->status }} </td>
+                                            @endrole
                                             <td>{{ $value->topic }} </td>
-                                            <td>{{ $value->category_name }} </td>
-                                            <td>{{ $value->subcategory_name }} </td>
+                                            
                                             <td>{{ $value->topic_seo }} </td>
                                             <td>{{ $value->topic_priority }} </td>
                                              <td>
                                                 <div class="hstack gap-3 flex-wrap">
                                                     <a href="{{ url('admin/topic/edit/'.Crypt::encrypt($value->id)) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
-                                                    <a href="javascript:void(0);" onclick="DeleteItems('../admin/topic','delete','{{Crypt::encrypt($value->id)}}')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
+                                                    <a href="{{ url('admin/topic/delete/'.Crypt::encrypt($value->id)) }}"  class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                                                 </div>
                                             </td>
                                         </tr>

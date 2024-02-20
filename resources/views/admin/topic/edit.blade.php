@@ -1,5 +1,5 @@
 @php
-    $active_menu = 'master';
+    $active_menu = '';
     $active_sub_menu = 'topic';
 @endphp
 @extends('layouts.admin_master')
@@ -69,28 +69,7 @@
                                                 <input type="text" class="form-control"  id="topic" value="{{ $data->topic}}" name="topic">
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Category</label>
-                                                <select  class="form-control"  id="category"  name="category">
-                                                <option value="" selected> Select  </option>
-                                                @foreach($category as $value)
-                                                 <option value="{{$value->id}}"  @if($data->category === $value->id)  selected @endif> {{ $value->category}} </option>
-                                                @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">SubCategory</label>
-                                                <select  class="form-control"  id="subcategory"  name="subcategory">
-                                                <option value="" selected> Select  </option>
-                                                @foreach($subcategory as $value)
-                                                <option value="{{$value->id}}"  @if($data->subcategory === $value->id)  selected @endif> {{ $value->subcategory}} </option>
-                                               @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
+                                       
                                         <div class="col-md-3 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">Priority</label>
@@ -98,31 +77,30 @@
                                             </div>
 
                                         </div>
+                                       
+
+
+                                 @role('admin')
                                         <div class="col-md-3 col-12">
                                             <div>
-                                                <label for="basiInput" class="form-label">Thumbnail</label>
-                                                <input type="file" class="form-control"  id="thumbnail" name="thumbnail" accept="image/*">
-                                                <img src="{{ url('public/data/thumbnail/'.$data->topic_thumbnail)}}" width="300" height="auto" alt="">
+                                                <label for="basiInput" class="form-label">Status</label>
+                                                <select class="form-select select2"  id="status_" name="status">
+                                                    <option value="" selected> Select </option>
+                                                    <option value="active" @if('active' == $data->status)  selected @endif>Active</option>
+                                                    <option value="inactive" @if('inactive' == $data->status)  selected @endif>Inactive</option>
+                                                    <option value="pending" @if('pending' == $data->status)  selected @endif>Pending</option>
+                                                    <option value="block" @if('block' == $data->status)  selected @endif>Block</option>
+                                                    <option value="deleted" @if('deleted' == $data->status)  selected @endif>Deleted</option>
 
+                                                </select>
                                             </div>
-
                                         </div>
-                                        <div class="col-md-3 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Banner</label>
-                                                <input type="file" class="form-control"  id="banner" name="banner" accept="image/*">
-                                                 <img src="{{ url('public/data/banners/'.$data->topic_banner)}}" width="300" height="auto" alt="">
-                                            </div>
-
-                                        </div>
-
-
-
+                                    @endrole
 
                                         <div class="col-md-2 col-6">
                                             <div>
                                                 <br>
-                                                <input type="Submit" class="btn btn-primary" value="Submit">
+                                                <input type="Submit" class="btn btn-primary mt-2" value="Update">
                                             </div>
                                         </div>
 
@@ -140,36 +118,3 @@
     </div>
 @endsection
 
-
-@section('js_bottom')
-<script>
-     console.log("work ");
-    $(document).ready(function(){
-        console.log("work 2");
-
-       $("#category").change(function(){
-        console.log("work 3");
-
-           let category =  $("#category").val();
-           $.ajax({
-              url: "{{ url('/admin/get/subcategory')}}" , 
-              type: "post" ,
-              data : {
-                "_token": "{{csrf_token()}}" , 
-                "category": category ,
-              }, 
-              success: function(res){
-                  $('#subcategory').html(res);
-                  console.log("work 4");
-
-              }, 
-              error: function(err){
-                 $('#subcategory').html(err);
-                 console.log("work 5");
-
-              }
-           })
-       });
-    });
-</script>
-@endsection

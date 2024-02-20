@@ -67,45 +67,39 @@
                                         <div class="col-md-6 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">Category</label>
-                                                <select class="form-control" id="category" name="category">
+                                                <select class="form-select select2"  id="category" name="category">
                                                     <option value="" selected> Select </option>
-                                               @foreach ($category as $value)
-                                               <option value="{{ $value->id }}" @if( $data->category == $value->id) selected @endif  >{{ $value->category }}</option>
-                                               @endforeach 
+                                                    @foreach ($category as $value)
+                                                        <option value="{{ $value->id }}"
+                                                            @if ($data->category == $value->id) selected @endif>
+                                                            {{ $value->category }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">SubCategory</label>
-                                                <select class="form-control" id="subcategory" name="subcategory">
+                                                <select class="form-select select2"  id="subcategory" name="subcategory">
                                                     <option value="" selected> Select </option>
                                                     @foreach ($subcategory as $value)
-                                               <option value="{{ $value->id }}" @if( $data->subcategory == $value->id) selected @endif  >{{ $value->subcategory }}</option>
-                                               @endforeach 
+                                                        <option value="{{ $value->id }}"
+                                                            @if ($data->subcategory == $value->id) selected @endif>
+                                                            {{ $value->subcategory }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Topic</label>
-                                                <select class="form-control" id="topic" name="topic">
-                                                    <option value="" selected> Select </option>
-                                                    @foreach ($topic as $value)
-                                                    <option value="{{ $value->id }}" @if( $data->category == $value->id) selected @endif  >{{ $value->topic }}</option>
-                                                    @endforeach 
-                                                </select>
-                                            </div>
-
                                         </div>
                                       
-                                     
+
+
                                         <div class="col-md-3 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">Banner</label>
                                                 <input type="file" class="form-control" id="banner" name="banner"
                                                     accept="image/*">
-                                                    <img src="{{ url('public/data/post/'.$data->post_banner)}}" width="300" height="auto" alt="">
+                                                <img src="{{ url('public/data/post/' . $data->post_banner) }}" width="300"
+                                                    height="auto" alt="">
 
                                             </div>
 
@@ -118,33 +112,44 @@
                                             </div>
 
                                         </div>
-                                        <div class="col-md-12 col-12">
+                                        {{-- <div class="col-md-12 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">Sort Description</label>
-                                                <textarea  class="form-control" id="sort_description" name="sort_description" rows="2"
-                                                >{{ $data->sort_description}}</textarea>
-                                                
+                                                <textarea class="form-control" id="sort_description" name="sort_description" rows="2">{{ $data->sort_description }}</textarea>
+
                                             </div>
 
-                                        </div>
+                                        </div> --}}
                                         <div class="col-md-12 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label"> Description</label>
-                                                <textarea  class="form-control" id="long_description" name="long_description" rows="6"
-                                                >{{ $data->long_description}}</textarea>
-                                                
+                                                <textarea class="form-control mytextarea" id="long_description" name="long_description" rows="30" >{{ $data->long_description }}</textarea>
+
                                             </div>
 
                                         </div>
-                                     
 
+                                        @role('admin')
+                                            <div class="col-md-3 col-12">
+                                                <div>
+                                                    <label for="basiInput" class="form-label">Status</label>
+                                                    <select class="form-select select2"  id="status_" name="status">
+                                                        <option value="" selected> Select </option>
+                                                        <option value="active" @if('active' == $data->status)  selected @endif>Active</option>
+                                                        <option value="inactive" @if('inactive' == $data->status)  selected @endif>Inactive</option>
+                                                        <option value="pending" @if('pending' == $data->status)  selected @endif>Pending</option>
+                                                        <option value="block" @if('block' == $data->status)  selected @endif>Block</option>
+                                                        <option value="deleted" @if('deleted' == $data->status)  selected @endif>Deleted</option>
 
-
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        @endrole
 
                                         <div class="col-md-2 col-6">
                                             <div>
                                                 <br>
-                                                <input type="Submit" class="btn btn-primary" value="Submit">
+                                                <input type="Submit" class="btn btn-primary mt-2" value="Update">
                                             </div>
                                         </div>
 
@@ -192,29 +197,7 @@
                 })
             });
             // another change
-            $("#subcategory").change(function() {
-                console.log("work 3");
-
-                let subcategory = $("#subcategory").val();
-                $.ajax({
-                    url: "{{ url('/admin/get/topic') }}",
-                    type: "post",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        "subcategory": subcategory,
-                    },
-                    success: function(res) {
-                        $('#topic').html(res);
-                        console.log("work 4");
-
-                    },
-                    error: function(err) {
-                        $('#topic').html(err);
-                        console.log("work 5");
-
-                    }
-                })
-            });
+           
         });
     </script>
 @endsection

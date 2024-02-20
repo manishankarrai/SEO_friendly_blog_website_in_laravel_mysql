@@ -25,7 +25,7 @@
         </div>
         <!-- end page title -->
         <div class="col-md-12 text-right" style="padding-bottom: 20px;">
-            <a href="{{ route('admin-subcategory-create') }}" class="btn btn-primary">+ Add New SubCategory</a>
+            <a href="{{ route('admin-subcategory-create') }}" class="btn btn-primary">+ Add New </a>
         </div>
             <div class="col-xl-12">
                 <div class="card">
@@ -61,7 +61,7 @@
                                         @php $i=1; @endphp
 			                            @foreach($data as $value)
                                         <tr>
-                                            <th scope="row">{{ $i; }}.</th>
+                                            <th scope="row">{{ $i }}.</th>
                                             <td>{{ $value->subcategory }} </td>
                                             <td>{{ $value->category_name }} </td>
                                             <td>{{ $value->subcategory_seo }} </td>

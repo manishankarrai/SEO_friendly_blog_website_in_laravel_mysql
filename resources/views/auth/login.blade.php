@@ -9,7 +9,7 @@
                 <div class="text-center mt-sm-5 mb-4 text-white-50">
                     <div>
                         <a href="{{ route('home') }}" class="d-inline-block auth-logo">
-                            <img src="{{ url('public/img/meatydelight.png') }}" alt="" height="120">
+                            <img src="" alt="" height="120">
                         </a>
                     </div>
 
@@ -21,11 +21,12 @@
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5">
                 <div class="card mt-4 card-bg-fill">
-
                     <div class="card-body p-4">
                         <div class="text-center mt-2">
+                            <img src="{{ url('public/assets/specialimage/logomyblog.png') }}" alt="" height="45" width="auto">
+
                             <h5 class="text-primary">Welcome Back !</h5>
-                            <p class="text-muted">Sign in to continue to RaiWorld</p>
+                            <p class="text-muted">Sign in to continue ...</p>
                         </div>
                         <div class="p-2 mt-4">
 
@@ -34,9 +35,9 @@
                                  @csrf
 
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Username</label>
+                                    <label for="username" class="form-label">Email</label>
                                     <input type="text" class="form-control" id="email"
-                                    name="email" placeholder="Enter username">
+                                    name="email" placeholder="Enter email">
                                 </div>
 
                                 <div class="mb-3">
@@ -59,6 +60,9 @@
 
 
                             </form>
+                             <div class="mt-4">
+                                   <span> If you have not any account , go for register </span> <a class="btn btn-info" href="{{route('register')}}" > Go</a>
+                                </div>
                         </div>
                     </div>
                     <!-- end card body -->

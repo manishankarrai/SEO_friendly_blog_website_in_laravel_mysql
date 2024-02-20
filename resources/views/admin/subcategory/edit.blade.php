@@ -72,7 +72,7 @@
                                         <div class="col-md-3 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">Category</label>
-                                                <select  class="form-control"  id="category"  name="category">
+                                                <select  class="form-select select2"  id="category"  name="category">
                                                 <option value="" selected> Select  </option>
                                                 @foreach($category as $value)
                                                  <option value="{{$value->id}}"  @if($data->category === $value->id)  selected @endif> {{ $value->category}} </option>
@@ -87,23 +87,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="col-md-3 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Thumbnail</label>
-                                                <input type="file" class="form-control"  id="thumbnail" name="thumbnail" accept="image/*">
-                                                <img src="{{ url('public/data/thumbnail/'.$data->subcategory_thumbnail)}}" width="300" height="auto" alt="">
-
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-3 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Banner</label>
-                                                <input type="file" class="form-control"  id="banner" name="banner" accept="image/*">
-                                                 <img src="{{ url('public/data/banners/'.$data->subcategory_banner)}}" width="300" height="auto" alt="">
-                                            </div>
-
-                                        </div>
+                                      
 
 
 
@@ -111,7 +95,7 @@
                                         <div class="col-md-2 col-6">
                                             <div>
                                                 <br>
-                                                <input type="Submit" class="btn btn-primary" value="Submit">
+                                                <input type="Submit" class="btn btn-primary mt-2" value="Update">
                                             </div>
                                         </div>
 

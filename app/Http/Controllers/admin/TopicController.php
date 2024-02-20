@@ -5,10 +5,11 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request ;
 use App\Models\Topic ;
+use App\Models\Social ;
 use Illuminate\Support\Facades\Validator;
-use Crypt ;
-use DB ;
-use Auth ;
+use Illuminate\Support\Facades\Crypt ;
+use Illuminate\Support\Facades\DB ;
+use Illuminate\Support\Facades\Auth ;
 
 class TopicController extends Controller
 {
@@ -21,11 +22,14 @@ class TopicController extends Controller
    
     public function index()
     {
-           try {  
-            $data =  Topic::leftJoin('categories' ,'topics.category' , '=' , 'categories.id')
-            ->leftJoin('sub_categories' ,'topics.subcategory' , '=' , 'sub_categories.id')
-            ->select('topics.*' , 'categories.category as category_name' , 'sub_categories.subcategory as subcategory_name')
-            ->orderby('topic' , 'asc')->get();
+          try {  
+            if($this->roleInfo()) {
+               $data =  Topic::orderby('topic' , 'asc')->get();
+            } else {
+              $uid =  auth()->user()->id ;
+              $data =  Topic::where('topics.uid' , $uid )
+                  ->orderby('topic' , 'asc')->get();
+            }
 
              return view('admin.topic.index' , compact('data'));
            }   catch( \Exception $e){
@@ -34,13 +38,35 @@ class TopicController extends Controller
        
     }
 
+
+
+
+    public function getPending(){
+      try {
+        if($this->roleInfo()) {
+          $data =  Topic::where('topics.status' , 'pending')->orderby('topic' , 'asc')->get();
+       }
+       return view('admin.topic.index' , compact('data'));
+      }   catch( \Exception $e){
+        return redirect()->back()->with('error' , 'Error found in url !');
+     }
+    }
+    public function getDeleted(){
+      try {
+        if($this->roleInfo()) {
+          $data =  Topic::where('topics.status' , 'deleted')->orderby('topic' , 'asc')->get();
+       }
+       return view('admin.topic.index' , compact('data'));
+      }   catch( \Exception $e){
+        return redirect()->back()->with('error' , 'Error found in url !');
+     }
+    }
+
    
     public function create()
     {
          try {
-            $category =  DB::table('categories')->orderby('category' , 'asc')->get();
-
-            return view('admin.topic.create' ,compact('category') );
+            return view('admin.topic.create' );
           } catch( \Exception $e){
             return redirect()->back()->with('error' , 'Error found in url !');
           }
@@ -55,8 +81,7 @@ class TopicController extends Controller
          
         try {
               $validator = Validator::make($request->all(), [
-                'category' => 'required|numeric',
-                'subcategory' => 'required|numeric',
+              
                 'priority' => 'required|numeric',
                 'topic'  => 'required|string',
                
@@ -70,45 +95,21 @@ class TopicController extends Controller
 
             DB::beginTransaction();
             $data                          =  new Topic;
-            $data->category                =  $request->category;
-            $data->subcategory             =  $request->subcategory;
+           
             $data->topic                   =  $request->topic;
             $data->topic_seo               =  $seo;
             $data->topic_priority          =  $request->priority;
             $data->uid                     =  Auth::user()->id;
             $data->status                  =  'pending';
             
-            if (!empty($request->thumbnail)) {
-              $value = $request->thumbnail;
-              $allowedExtensions = ['jpg', 'jpeg', 'png' , 'svg' ];
-              $extension = $value->getClientOriginalExtension();
-              if (in_array($extension, $allowedExtensions)) {
-                  $thumbnail = md5(time()) . '.' . $extension;
-                  $value->move(public_path() . '/data/thumbnail/', $thumbnail);
-                  $data->topic_thumbnail = $thumbnail;
-              } else {
-                  return redirect()->back()->withInput()->with('error','Something went wrong with thumbnail image');
-              }
-            }
-            if (!empty($request->banner)) {
-              $value = $request->banner;
-              $allowedExtensions = ['jpg', 'jpeg', 'png' , 'svg' ];
-              $extension = $value->getClientOriginalExtension();
-              if (in_array($extension, $allowedExtensions)) {
-                  $banner = md5(time()) . '.' . $extension;
-                  $value->move(public_path() . '/data/banners/', $banner);
-                  $data->topic_banner = $banner;
-              } else {
-                  return redirect()->back()->withInput()->with('error','Something went wrong with banner image');
-              }
-            }
+          
 
             $data->save();
             DB::commit();
             return redirect('/admin/topic')->with('success' , 'data store successfully');
           } catch( \Exception $e){
             DB::rollBack();
-            return redirect()->back()->withInput()->with('error' , 'Error found in url ! ');
+            return redirect()->back()->withInput()->with('error' , 'Error found in url ! '.$e->getMessage());
           }
         
     }
@@ -125,10 +126,8 @@ class TopicController extends Controller
         try {
             $id =  Crypt::decrypt($request->id);
             $data = Topic::find($id);
-            $subcategory  =  DB::table('sub_categories')->where('category', $data->category)
-            ->orderby('subcategory', 'asc')->get();
-            $category =  DB::table('categories')->orderby('category' , 'asc')->get();
-            return view('admin.topic.edit' , compact('data' , 'category', 'subcategory'));
+           
+            return view('admin.topic.edit' , compact('data'));
           } catch( \Exception $e){
             return redirect()->back()->with('error' , 'Error found in url !');
           }
@@ -140,12 +139,10 @@ class TopicController extends Controller
             
       try {
            $validator = Validator::make($request->all(), [
-                'category' => 'required|numeric',
-                'subcategory' => 'required|numeric',
+                
                 'priority' => 'required|numeric',
                 'topic'  => 'required|string',
                
-               // 'captcha' => 'required|captcha',
 
             ]);
             if ($validator->fails()) {
@@ -156,35 +153,18 @@ class TopicController extends Controller
 
         DB::beginTransaction();
         $data                          =  Topic::find($id);
-        $data->category                =  $request->category;
-        $data->subcategory             =  $request->subcategory;
+       
         $data->topic                   =  $request->topic;
         $data->topic_seo               =  $seo;
         $data->topic_priority          =  $request->priority;
-        if (!empty($request->thumbnail)) {
-          $value = $request->thumbnail;
-          $allowedExtensions = ['jpg', 'jpeg', 'png' , 'svg' ];
-          $extension = $value->getClientOriginalExtension();
-          if (in_array($extension, $allowedExtensions)) {
-              $thumbnail = md5(time()) . '.' . $extension;
-              $value->move(public_path() . '/data/thumbnail/', $thumbnail);
-              $data->topic_thumbnail = $thumbnail;
-          } else {
-              return redirect()->back()->withInput()->with('error','Something went wrong with thumbnail image');
-          }
+
+        if($this->roleInfo()){
+          $data->status                   =  $request->status;
+        } else {
+          $data->status                   =  'pending';
         }
-        if (!empty($request->banner)) {
-          $value = $request->banner;
-          $allowedExtensions = ['jpg', 'jpeg', 'png' , 'svg' ];
-          $extension = $value->getClientOriginalExtension();
-          if (in_array($extension, $allowedExtensions)) {
-              $banner = md5(time()) . '.' . $extension;
-              $value->move(public_path() . '/data/banners/', $banner);
-              $data->topic_banner = $banner;
-          } else {
-              return redirect()->back()->withInput()->with('error','Something went wrong with banner image');
-          }
-        }
+        
+       
 
         $data->update();
         DB::commit();
@@ -200,10 +180,17 @@ class TopicController extends Controller
     
     public function destroy(Request $request)
     {
+     
         try {
-            $id =  Crypt::decrypt($request->id);
-            $data = Topic::find($id);
-            $data->delete();
+            $id      =  Crypt::decrypt($request->id);
+            $data    =  Topic::find($id);
+            $social  =  Social::where('topic' , $data->id)->get();
+            $noOfItem =  count($social);
+            if($noOfItem == 0){
+              $data->delete();
+            }else {
+              return redirect()->back()->with('error' , 'Blog Exit on that topic , first delete blog then delete topic  !');
+            }
             return redirect('/admin/topic')->with('success' , 'data deleted successfully');
           } catch( \Exception $e){
             return redirect()->back()->with('error' , 'Error found in url !');

@@ -17,11 +17,11 @@ return new class extends Migration
             $table->integer('category');
             $table->integer('subcategory');
             $table->integer('topic');
-            $table->string('title');
-            $table->string('title_seo');
-            $table->string('sort_description');
+            $table->string('title' , 500);
+            $table->text('title_seo');
+            
             $table->text('long_description');
-            $table->string('post_banner')->nullable();
+            $table->string('post_banner');
             $table->integer('view')->default(0);
             $table->enum('status' , ['active' , 'inactive' , 'pending' , 'block' , 'deleted'])->default('inactive');
             $table->timestamps();

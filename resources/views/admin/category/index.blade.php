@@ -25,7 +25,7 @@
         </div>
         <!-- end page title -->
         <div class="col-md-12 text-right" style="padding-bottom: 20px;">
-            <a href="{{ route('admin-category-create') }}" class="btn btn-primary">+ Add New Category</a>
+            <a href="{{ route('admin-category-create') }}" class="btn btn-primary">+ Add New </a>
         </div>
             <div class="col-xl-12">
                 <div class="card">
@@ -60,7 +60,7 @@
                                         @php $i=1; @endphp
 			                            @foreach($data as $value)
                                         <tr>
-                                            <th scope="row">{{ $i; }}.</th>
+                                            <th scope="row">{{ $i }}.</th>
                                             <td>{{ $value->category }} </td>
                                             <td>{{ $value->category_seo }} </td>
                                             <td>{{ $value->category_priority }} </td>

@@ -7,11 +7,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @yield('title')
-    
-    <meta name="author" content="simsimpro" />
+
+    <meta name="author" content="www.myblog.com" />
+
 
     <!-- Favicons -->
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" href="{{ url('public/icon.png') }}" type="image/x-icon">
+
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
@@ -20,26 +22,60 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Hind:400,600,700&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
-    <link href="{{ url('public/front/css/style.css')}}" rel="stylesheet" media="screen">
+    <link href="{{ url('public/front/css/style.css') }}" rel="stylesheet" media="screen">
+
+    <style>
+        #head_navbar {
+            color: white;
+            /* Text color */
+            background-color: #222222;
+            /* Background color - you can replace this with your preferred color code */
+        }
+
+        .blog-thumbnail-img>img {
+            height: 250px !important;
+            width: 100%;
+        }
+
+        .post-thumbnail {
+            positive: relative;
+            display: flex;
+            justify-content: center;
+            align-item: center;
+        }
+
+        .customheading {
+            padding: 40px !important;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .customheading {
+                padding: 20px !important;
+                font-size: 30px;
+            }
+
+            .blog-thumbnail-img>img {
+                height: 270px !important;
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
     <!-- Loader -->
 
-    <div class="loader">
-        <div class="spinner">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-        </div>
-    </div>
 
     <!-- Header -->
 
-    <header class="navbar">
+    <header class="navbar" id="head_navbar">
         <div class="container">
-            <a href="{{ route('index')}}" class="brand js-target-scroll">
-                <img src="{{ url('public/front/logo/black-logo.png') }}" alt="" width="auto" height="45">
+            <a href="{{ route('home') }}" class="brand js-target-scroll">
+                <img src="{{ url('public/front/logo/logomyblog.png') }}" alt="" width="auto" height="45">
             </a>
 
             <!-- Navbar Collapse -->
@@ -55,12 +91,39 @@
 
             <nav class="nav-desctop hidden-xs hidden-sm">
                 <ul class="nav-desctop-list">
-                    <li>
-                        <a href='home-agency.html'>Home</a>
-                       
+                    <li class="">
+                        <a href='{{ route('home') }}'>Home</a>
                     </li>
-                   
-                    <li class="active">
+                    <li class="">
+                        <a href="{{ route('topic-page') }}">Social</a>
+                    </li>
+                    @auth
+                    <li class="">
+                        <p>Welcome, {{ Auth::user()->name }}!</p>
+
+
+                        <ul>
+                            <li>
+                                <a href="{{ route('admin-dashboard') }}"> <b>Dashboard </b></a>
+                            </li>
+                            <li>
+                                <a href="{{ route('logout') }}"> <b>Logout </b></a>
+                            </li>
+                        </ul>
+
+                    </li>
+
+                    @else
+                    <li class="">
+                        <a href='{{ route('login') }}'>Login</a>
+                    </li>
+                    <li class="">
+                        <a href="{{ route('register') }}">Register</a>
+                    </li>
+                    @endauth
+
+
+                    {{-- <li class="active">
                         <a href='blog-list1.html'>Blog</a>
                         <ul>
                             <li class="active">
@@ -74,7 +137,7 @@
                     <li>
                         <a href='contacts.html'>Contacts</a>
                       
-                    </li>
+                    </li> --}}
                 </ul>
             </nav>
 
@@ -83,11 +146,32 @@
             <nav class="nav-mobile hidden-md hidden-lg">
                 <div class="collapse navbar-collapse" id="nav-collapse">
                     <ul class="nav-mobile-list">
+                        @auth
                         <li>
-                            <a href='{{ route('home')}}'>Home</a>
+                            <p style="color: white;">Welcome, {{ Auth::user()->name }} !</p>
                         </li>
-                       
-                        <li class="active">
+                          <li>
+                            <a href="{{ route('admin-dashboard') }}" style="color: white;">Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('logout') }}" style="color: white;">Logout</a>
+                        </li>
+                        @else
+                        <li>
+                            <a href='{{ route('login') }}' style="color: white;">Login</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('register') }}" style="color: white;">Register</a>
+                        </li>
+                        @endauth
+                        <li>
+                            <a href='{{ route('home') }}' style="color: white;">Home</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('topic-page') }}" style="color: white;">Social</a>
+                        </li>
+
+                        {{-- <li class="active">
                             <a href=''>Blog</a>
                             <ul>
                                 <li class="active">
@@ -96,12 +180,12 @@
                                 </li>
                                 <li><a href=''>Blog details</a></li>
                             </ul>
-                        </li>
-                       
-                        <li>
+                        </li> --}}
+
+                        {{-- <li>
                             <a href='contacts.html'>Contacts</a>
                             
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </nav>
@@ -110,127 +194,84 @@
 
     <!-- Home -->
 
-    <main class="main main-inner main-blog jarallax" data-jarallax='{"speed": 0.7}'>
-        <div class="container">
-            <div class="opener">
-                <h1>Useful articles.</h1>
-                <div class="row">
-                    <p class="lead col-md-6 col-md-offset-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                        Esse non earum consectetur, ratione.</p>
-                </div>
-            </div>
-        </div>
-    </main>
+    @yield('headbanner');
 
     <div class="content">
 
-                      @if (session('success'))
-                            <div class="alert alert-success alert-dismissible alert-fixed text-center">
-                                <i class="las la-thumbs-up"></i>
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger alert-dismissible alert-fixed text-center">
-                                <i class="las la-thumbs-down"></i>
-                                {{ session('error') }}
-                            </div>
-                        @endif
-                        @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible alert-fixed">
-                                <ul>
-                                    <li> <i class="las la-thumbs-down"></i> Error found , please check all value again !
-                                    </li>
-                                    @foreach ($errors->all() as $error)
-                                        <li> {{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+        @if (session('success'))
+        <div class="alert alert-success alert-dismissible alert-fixed text-center" style="margin-top: 80px;">
+            <i class="las la-thumbs-up"></i>
+            {{ session('success') }}
+        </div>
+        @endif
+        @if (session('error'))
+        <div class="alert alert-danger alert-dismissible alert-fixed text-center" style="margin-top: 80px;">
+            <i class="las la-thumbs-down"></i>
+            {{ session('error') }}
+        </div>
+        @endif
+        @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible alert-fixed" style="margin-top: 80px;">
+            <ul>
+                <li> <i class="las la-thumbs-down"></i> Error found , please check all value again !
+                </li>
+                @foreach ($errors->all() as $error)
+                <li> {{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <!-- Blog List -->
 
-          @yield('content')
+        @yield('content')
 
         <!-- Footer -->
 
         <footer id="footer" class="footer bg-dark">
             <div class="container">
                 <div class="row-base row-space row">
-                    <div class="brand-info col-base col-space col-sm-6 col-md-3">
-                        <a href="#top" class="brand js-target-scroll" style="margin-left: -50px;">
-                            <img src="{{ url('public/front/logo/white_logo.png') }}" alt="" width="auto" height="70">
+                    <div class="brand-info col-base col-space col-sm-9 col-md-9">
+                        <a href="#top" class="brand js-target-scroll">
+                            <img src="{{ url('public/front/logo/logomyblog.png') }}" alt="" width="auto" height="70">
+
                         </a>
-                        <p>We create web products for the help and growth of your business.</p>
-                        <address><strong class="text-white">E-mail:</strong> selena@info.ru</address>
+                        <p>This blogging website focuses on providing content that inspires and uplifts readers in their daily lives. It might cover topics like personal development, motivation, and positive lifestyle choices.</p>
+
                     </div>
-                    <div class="col-base col-space col-sm-6 col-md-2">
+                    <div class="col-base col-space col-sm-3 col-md-3">
                         <strong class="footer-title">Links</strong>
                         <ul class="nav-bottom">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Pages</a></li>
-                            <li><a href="#">Portfolio</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contacts</a></li>
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li>
+                                <address><strong class="text-white">E-mail:</strong> help@myblog.com </address>
+                            </li>
+
                         </ul>
                     </div>
-                    <div class="col-base col-space col-sm-6 col-md-4">
-                        <div class="widget_recent_entries">
-                            <strong class="footer-title">Recent Posts</strong>
-                            <ul>
-                                <li>
-                                    <div class="media-left"><a href="#"><img alt=""
-                                                src="{{ url('public/front/img/blog/1-70x70.jpg') }}"></a></div>
-                                    <div class="media-right">
-                                        <a href="#" class="recet-entries-title">Don’t miss Top Things To Do In
-                                            San Francisco</a>
-                                        <div class="recent-entries-time">12/09/2016 </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="media-left"><a href="#"><img alt=""
-                                                src="{{ url('public/front/img/blog/2-70x70.jpg') }}"></a></div>
-                                    <div class="media-right">
-                                        <a href="#" class="recet-entries-title">Don’t miss Top Things To Do In
-                                            San Francisco</a>
-                                        <div class="recent-entries-time">12/09/2016 </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-subscribe col-base col-space col-sm-6 col-md-3">
-                        <strong class="footer-title">Newsletter</strong>
-                        <form class="subscribe-form js-subscribe-form">
-                            <div class="input-group">
-                                <input id="mc-email" type="email" class="input-round form-control"
-                                    placeholder="Email">
-                                <span class="input-group-btn">
-                                    <button class="btn" type="submit"><span
-                                            class="icon-arrow-right"></span></button>
-                                </span>
-                            </div>
-                            <label class="mc-label" for="mc-email" id="mc-notification"></label>
-                        </form>
-                    </div>
+
+
                 </div>
             </div>
             <div class="footer-bottom">
                 <div class="container">
                     <div class="copyrights">
-                        © 2020 RaiWorld. Design by Themeslelo.
+                        © <script>
+                            document.write(new Date().getFullYear())
+
+                        </script> myblog
                     </div>
-                    <ul class="social-list">
+                    {{-- <ul class="social-list">
                         <li><a href="#" class="fa fa-facebook"></a></li>
                         <li><a href="#" class="fa fa-twitter"></a></li>
                         <li><a href="#" class="fa fa-linkedin"></a></li>
                         <li><a href="#" class="fa fa-instagram"></a></li>
-                    </ul>
+                    </ul> --}}
                 </div>
             </div>
         </footer>
     </div>
 
-    
+
     <!-- SCRIPTS -->
 
     <script src="{{ url('public/front/js/jquery.min.js') }}"></script>
@@ -263,6 +304,20 @@
     <script src="{{ url('public/front/js/rev-slider-init.js') }}"></script>
     <script src="{{ url('public/front/js/interface.js') }}"></script>
     @yield('js_bottom')
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#myeditor'), {
+
+                removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed']
+            , })
+            .catch(error => {
+                console.error(error);
+            });
+
+    </script>
+
 </body>
 
 

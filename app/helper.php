@@ -30,22 +30,13 @@ if(!function_exists('getSubCategory')){
     }
 }
 
-if(!function_exists('getDummyBlogImg')){
-    function getDummyBlogImg(){
-         $data  = ['blog1.jpg' , 'blog2.jpg' , 'blog3.jpg' , 'blog4.jpg' ];
-         $randomElement = $data[array_rand($data)];
-         
-        return $randomElement ;
+if(!function_exists('getTopic')){
+    function getTopic(){
+        $topic  =  DB::table('topics')->orderby('topic_priority' , 'asc')->get();
+        return $topic ;
     }
 }
 
 
-// like top 5  , most view suggest article are lies here 
 
 
-
-// recomended articles lies here 
-
-
-
-//make category subcategory in  a way that its look cools

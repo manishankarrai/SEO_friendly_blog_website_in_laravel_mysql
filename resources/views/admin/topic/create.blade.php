@@ -1,5 +1,5 @@
 @php
-    $active_menu = 'master';
+    $active_menu = '';
     $active_sub_menu = 'topic';
 @endphp
 @extends('layouts.admin_master')
@@ -68,25 +68,7 @@
                                                 <input type="text" class="form-control"  id="topic" value="{{ old('topic')}}" name="topic">
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Category</label>
-                                                <select  class="form-control"  id="category"  name="category">
-                                                <option value="" selected> Select  </option>
-                                                @foreach($category as $value)
-                                                <option value="{{ $value->id}}"  >{{$value->category}} </option>
-                                                @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">SubCategory</label>
-                                                <select  class="form-control"  id="subcategory"  name="subcategory">
-                                                <option value="" selected> Select  </option>
-                                              
-                                                </select>
-                                            </div>
+                                      
                                         </div>
                                         <div class="col-md-3 col-12">
                                             <div>
@@ -95,28 +77,14 @@
                                             </div>
 
                                         </div>
-                                        <div class="col-md-3 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Thumbnail</label>
-                                                <input type="file" class="form-control"  id="thumbnail" name="thumbnail" accept="image/*">
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-3 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Banner</label>
-                                                <input type="file" class="form-control"  id="banner" name="banner" accept="image/*">
-                                            </div>
-
-                                        </div>
-
+                                     
 
 
 
                                         <div class="col-md-2 col-6">
                                             <div>
                                                 <br>
-                                                <input type="Submit" class="btn btn-primary" value="Submit">
+                                                <input type="Submit" class="btn btn-primary  mt-2" value="Submit">
                                             </div>
                                         </div>
 
@@ -132,37 +100,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('js_bottom')
-<script>
-     console.log("work ");
-    $(document).ready(function(){
-        console.log("work 2");
-
-       $("#category").change(function(){
-        console.log("work 3");
-
-           let category =  $("#category").val();
-           $.ajax({
-              url: "{{ url('/admin/get/subcategory')}}" , 
-              type: "post" ,
-              data : {
-                "_token": "{{csrf_token()}}" , 
-                "category": category ,
-              }, 
-              success: function(res){
-                  $('#subcategory').html(res);
-                  console.log("work 4");
-
-              }, 
-              error: function(err){
-                 $('#subcategory').html(err);
-                 console.log("work 5");
-
-              }
-           })
-       });
-    });
-</script>
 @endsection

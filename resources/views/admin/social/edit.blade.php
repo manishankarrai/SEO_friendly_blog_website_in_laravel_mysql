@@ -1,9 +1,18 @@
 @php
-    $active_menu = 'viralblog';
-    $active_sub_menu = '';
+    $active_menu = 'social';
+    $active_sub_menu = 'social';
 @endphp
 @extends('layouts.admin_master')
 @section('content')
+  <style> 
+       .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+          height: 200px;
+    }
+    .ck-rounded-corners .ck.ck-editor__main>.ck-editor__editable, .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners {
+         height: 200px;
+    }
+   
+  </style>
     <div class="page-content">
         <div class="container-fluid">
 
@@ -11,12 +20,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">ViralBlogs</h4>
+                        <h4 class="mb-sm-0">Social</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Edit ViralBlogs</li>
+                                <li class="breadcrumb-item active">Edit Social</li>
                             </ol>
                         </div>
 
@@ -28,7 +37,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Edit ViralBlogs</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Edit Social</h4>
 
                         </div><!-- end card header -->
                         @if (session('success'))
@@ -56,7 +65,7 @@
                         @endif
                         <div class="card-body">
                             <form name="addNewsfrm" enctype="multipart/form-data"
-                                action="{{ route('admin-viralblog-update', Crypt::encrypt($data->id)) }}" method="POST">
+                                action="{{ route('admin-social-update', Crypt::encrypt($data->id)) }}" method="POST">
                                 @csrf
                                 <div class="live-preview">
                                     <div class="row gy-4">
@@ -64,52 +73,24 @@
 
 
 
-                                        <div class="col-md-6 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Category</label>
-                                                <select class="form-control" id="category" name="category">
-                                                    <option value="" selected> Select </option>
-                                               @foreach ($category as $value)
-                                               <option value="{{ $value->id }}" @if( $data->category == $value->id) selected @endif  >{{ $value->category }}</option>
-                                               @endforeach 
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">SubCategory</label>
-                                                <select class="form-control" id="subcategory" name="subcategory">
-                                                    <option value="" selected> Select </option>
-                                                    @foreach ($subcategory as $value)
-                                               <option value="{{ $value->id }}" @if( $data->subcategory == $value->id) selected @endif  >{{ $value->subcategory }}</option>
-                                               @endforeach 
-                                                </select>
-                                            </div>
-                                        </div>
+                                      
                                         <div class="col-md-6 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">Topic</label>
-                                                <select class="form-control" id="topic" name="topic">
+                                                <select class="form-select select2"  id="topic" name="topic">
                                                     <option value="" selected> Select </option>
                                                     @foreach ($topic as $value)
-                                                    <option value="{{ $value->id }}" @if( $data->category == $value->id) selected @endif  >{{ $value->topic }}</option>
-                                                    @endforeach 
+                                                        <option value="{{ $value->id }}"
+                                                            @if ($data->topic == $value->id) selected @endif>
+                                                            {{ $value->topic }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
 
                                         </div>
+
+
                                       
-                                     
-                                        <div class="col-md-3 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Banner</label>
-                                                <input type="file" class="form-control" id="banner" name="banner"
-                                                    accept="image/*">
-                                                    <img src="{{ url('public/data/viralpost/'.$data->post_banner)}}" width="300" height="auto" alt="">
-
-                                            </div>
-
-                                        </div>
                                         <div class="col-md-12 col-12">
                                             <div>
                                                 <label for="basiInput" class="form-label">Title</label>
@@ -118,41 +99,38 @@
                                             </div>
 
                                         </div>
+                                        
                                         <div class="col-md-12 col-12">
                                             <div>
-                                                <label for="basiInput" class="form-label"> Link</label>
-                                                <textarea class="form-control" id="link" name="link" rows="2">{{ $data->link }}</textarea>
-
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-12 col-12">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Sort Description</label>
-                                                <textarea  class="form-control" id="sort_description" name="sort_description" rows="2"
-                                                >{{ $data->sort_description}}</textarea>
-                                                
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-12 col-12">
-                                            <div>
+                                            
                                                 <label for="basiInput" class="form-label"> Description</label>
-                                                <textarea  class="form-control" id="long_description" name="long_description" rows="6"
-                                                >{{ $data->long_description}}</textarea>
-                                                
+                                                <textarea class="form-control" id="myeditor" name="long_description" rows="30" >{{ $data->long_description }}</textarea>
+
                                             </div>
 
                                         </div>
-                                     
 
+                                        @role('admin')
+                                            <div class="col-md-3 col-12">
+                                                <div>
+                                                    <label for="basiInput" class="form-label">Status</label>
+                                                    <select class="form-select select2"  id="status_" name="status">
+                                                        <option value="" selected> Select </option>
+                                                        <option value="active" @if('active' == $data->status)  selected @endif>Active</option>
+                                                        <option value="inactive" @if('inactive' == $data->status)  selected @endif>Inactive</option>
+                                                        <option value="pending" @if('pending' == $data->status)  selected @endif>Pending</option>
+                                                        <option value="block" @if('block' == $data->status)  selected @endif>Block</option>
+                                                        <option value="deleted" @if('deleted' == $data->status)  selected @endif>Deleted</option>
 
-
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        @endrole
 
                                         <div class="col-md-2 col-6">
                                             <div>
                                                 <br>
-                                                <input type="Submit" class="btn btn-primary" value="Submit">
+                                                <input type="Submit" class="btn btn-primary mt-2" value="Update">
                                             </div>
                                         </div>
 

@@ -11,12 +11,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    function checkRole()
-    {
-        // $user = auth()->user();
-        // if (! $user->hasRole('admin')) {
-        //     abort(403, 'Unauthorized');
-        // }
+   
+    public function roleInfo(){
+     //   dd(auth()->user());
+
+         $role =  auth()->user()->hasRole('admin'); 
+         return   $role ;
     }
     function seoName($string){
         $string = str_replace(array('[\', \']'), '', $string);

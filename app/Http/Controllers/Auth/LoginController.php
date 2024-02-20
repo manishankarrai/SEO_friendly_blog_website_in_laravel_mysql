@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -45,11 +45,8 @@ class LoginController extends Controller
         $user = auth()->user();
         if($user==null){
             Auth::logout();
-            return redirect('/login');
         }else{
-            if($user->hasRole('admin') ){
-    			return 'admin/dashboard';
-            }else if($user->hasRole('writer') ){
+            if($user->hasRole('admin') || $user->hasRole('writer') || $user->hasRole('user')){
     			return 'admin/dashboard';
             }else{
                 return '/';

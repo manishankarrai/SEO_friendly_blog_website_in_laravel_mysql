@@ -25,7 +25,13 @@
         </div>
         <!-- end page title -->
         <div class="col-md-12 text-right" style="padding-bottom: 20px;">
-            <a href="{{ route('admin-blog-create') }}" class="btn btn-primary">+ Add New Blog</a>
+            @role('admin')
+            <a href="{{ route('admin-blog-pending') }}" class="btn @if($type == 'pending') btn-info @else  btn-primary @endif"
+            >  Pending</a>
+            <a href="{{ route('admin-blog-deleted') }}" class="btn @if($type == 'deleted') btn-info @else  btn-primary @endif"
+            >  Deleted</a>
+            @endrole
+            <a href="{{ route('admin-blog-create') }}" class="btn btn-primary">+ Add New </a>
         </div>
             <div class="col-xl-12">
                 <div class="card">
@@ -50,11 +56,16 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">S.No</th>
-                                            <th scope="col">Name</th>
+                                            @role('admin')
+                                              <th scope="col">Status</th>
+                                              <th scope="col">Writer</th>
+                                            @endrole
+                                            <th scope="col">Title</th>
                                             <th scope="col">Category</th>
                                             <th scope="col">SubCategory</th>
-                                            <th scope="col">Topic</th>
+                                          
                                             <th scope="col">Seo</th>
+                                            <th scope="col">View</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -62,15 +73,22 @@
                                         @php $i=1; @endphp
 			                            @foreach($data as $value)
                                         <tr>
-                                            <th scope="row">{{ $i; }}.</th>
+                                            <th scope="row">{{ $i  }}.</th>
+                                            @role('admin')
+                                            <td class="text-danger">{{ $value->status }} </td>
+                                            <td class="">{{ $value->username }} </td>
+                                            @endrole
                                             <td>{{ $value->title }} </td>
                                             <td>{{ $value->category_name }} </td>
                                             <td>{{ $value->subcategory_name }} </td>
-                                            <td>{{ $value->topic_name }} </td>
+                                        
                                             <td>{{ $value->title_seo }} </td>
+                                            <td>{{ $value->view }} </td>
                                              <td>
                                                 <div class="hstack gap-3 flex-wrap">
                                                     <a href="{{ url('admin/blog/edit/'.Crypt::encrypt($value->id)) }}" class="link-success fs-15"><i class="ri-edit-2-line"></i></a>
+                                                    
+                                                    <a href="{{ url('/'.$value->title_seo) }}" class="link-info fs-15"><i class="las la-eye"></i></a>
                                                     <a href="javascript:void(0);" onclick="DeleteItems('../admin/blog','delete','{{Crypt::encrypt($value->id)}}')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                                                 </div>
                                             </td>

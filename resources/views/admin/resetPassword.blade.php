@@ -67,7 +67,7 @@
                                         <div class="col-md-2">
                                             <div>
                                                 <br>
-                                                <input type="Submit" class="btn btn-primary" value="Submit">
+                                                <input type="Submit" class="btn btn-primary mt-2" value="Submit">
                                             </div>
                                         </div>
 
